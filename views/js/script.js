@@ -7,10 +7,10 @@
 
 //show animation
 var animationin=$('.alert').data('animationin');
-//animationin='bounce'
+
 var animationout=$('.alert').data('animationout');
 $('.alert').addClass('animated '+ animationin);
-
+animationout='bounceOut';
 
 //close
 //$('.close').addClass('animated bounce');

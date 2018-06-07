@@ -30,7 +30,10 @@ class mark_newoffer extends Module
     {
         return parent::install()
         && $this->registerHook('displayHeader')
-        && $this->registerHook('displayHome') ;
+        && $this->registerHook('displayHome')
+        && Configuration::updateValue('background', '#000')
+        && Configuration::updateValue('font_color', '#fff' )
+        && Configuration::updateValue('animation', 'bounce' );
     }
 
 
@@ -62,72 +65,119 @@ class mark_newoffer extends Module
 
     public function hookDisplayHome()
     {
-        $value = Configuration::get('background');
-        $this ->context->smarty-> assign('value',$value);
+        $background = Configuration::get('background');
+        $font_color = Configuration::get('font_color');
+        $animation = Configuration::get('animation');
+        $this ->context->smarty-> assign('background',$background);
+        $this ->context->smarty-> assign('font_color',$font_color);
+        $this ->context->smarty-> assign('animation',$animation);
         return $this->display(__FILE__, 'views/templates/hook/alert.tpl');
     }
 
     public function getContent()
     {
-       $output = null;
+     $output = null;
 
-       if (Tools::isSubmit('submit'.$this->name))
-       {
+     if (Tools::isSubmit('submit'.$this->name))
+     {
         $background= strval(Tools::getValue('background'));
-        if (!$background
-          || empty($background)
-          || !Validate::isGenericName($background))
+        $font_color= strval(Tools::getValue('font_color'));
+        $animation= strval(Tools::getValue('animation'));
+        if ( (!$background || empty($background) || !Validate::isGenericName($background))
+         &&   (!$font_color || empty($font_color)  || !Validate::isGenericName($font_color)) )
             $output .= $this->displayError($this->l('Invalid Configuration value'));
-            else
-            {
-                Configuration::updateValue('background', $background);
-                $output .= $this->displayConfirmation($this->l('Settings updated'));
-            }
-        }
 
-        return $output.$this->displayForm();
+        else
+        {
+            Configuration::updateValue('font_color', $font_color);
+            Configuration::updateValue('background', $background);
+            Configuration::updateValue('animation', $animation);
+            $output .= $this->displayConfirmation($this->l('Settings updated'));
+        }
     }
 
+    return $output.$this->displayForm();
+}
 
-    public function displayForm()
-    {
+
+public function displayForm()
+{
     // Get default language
-        $default_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+    $default_lang = (int)Configuration::get('PS_LANG_DEFAULT');
 
     // Init Fields form array
-        $fields_form[0]['form'] = array(
-            'legend' => array(
-                'title' => $this->l('Settings'),
+    $fields_form[0]['form'] = array(
+        'legend' => array(
+            'title' => $this->l('Settings'),
+        ),
+        'input' => array(
+            array(
+                'type' => 'color',
+                'label' => $this->l('Background'),
+                'name' => 'background',
+                'data-hex' => true,
+                'class'   => 'mColorPicker',
+                'desc' => $this->l('Enter hex code.'),
+                'required' => true
             ),
-            'input' => array(
-                array(
-                    'type' => 'text',
-                    'label' => $this->l('Background'),
-                    'name' => 'background',
-                    'size' => 20,
-                    'required' => true
-                )
+            array(
+                'type' => 'color',
+                'label' => $this->l('Font color'),
+                'name' => 'font_color',
+                'data-hex' => true,
+                'class'   => 'mColorPicker',
+                'desc' => $this->l('Enter hex code.'),
+                'required' => true
             ),
-            'submit' => array(
-                'title' => $this->l('Save'),
-                'class' => 'btn btn-default pull-right'
-            )
-        );
 
-        $helper = new HelperForm();
+            // Select animation 1
+            array(
+              'type' => 'select',
+              'label' => $this->l('Animation:'),
+              'name' => 'animation',
+              'desc' => $this->l('Select Animation.'),
+              'required' => true,
+              'options' => array(
+               'query' => $idanimation = array( 
+
+                array(
+                    'idanimation' => 'bounce',
+                    'name' => 'bounce'
+                ),
+                array(
+                    'idanimation' => 'flash',
+                    'name' => 'flash'
+                ), 
+                array(
+                    'idanimation' => 'pulse',
+                    'name' => 'pulse'
+                ),                                       
+            ),
+               'id' => 'idanimation',
+               'name' => 'name'
+           )
+          ),
+        )        ,
+        'submit' => array(
+            'title' => $this->l('Save'),
+            'class' => 'btn btn-default pull-right'
+        )
+    );
+
+    $helper = new HelperForm();
 
     // Module, token and currentIndex
-        $helper->module = $this;
-        $helper->name_controller = $this->name;
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+    $helper->module = $this;
+    $helper->name_controller = $this->name;
+    $helper->token = Tools::getAdminTokenLite('AdminModules');
+    $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
 
     // Language
-        $helper->default_form_language = $default_lang;
-        $helper->allow_employee_form_lang = $default_lang;
+    $helper->default_form_language = $default_lang;
+    $helper->allow_employee_form_lang = $default_lang;
 
     // Title and toolbar
-        $helper->title = $this->displayName;
+    $helper->title = $this->displayName;
     $helper->show_toolbar = true;        // false -> remove toolbar
     $helper->toolbar_scroll = true;      // yes - > Toolbar is always visible on the top of the screen.
     $helper->submit_action = 'submit'.$this->name;
@@ -146,6 +196,8 @@ class mark_newoffer extends Module
 
     // Load current value
     $helper->fields_value['background'] = Configuration::get('background');
+    $helper->fields_value['font_color'] = Configuration::get('font_color');
+    $helper->fields_value['animation'] = $idanimation;
 
     return $helper->generateForm($fields_form);
 }
