@@ -68,3 +68,8 @@ and (-webkit-min-device-pixel-ratio: 2) {
   left:0; 
   cursor:pointer;
 }
+
+img{
+
+  with:100%;
+}

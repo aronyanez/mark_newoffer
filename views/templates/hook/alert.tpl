@@ -1,9 +1,11 @@
 <div class="alert" style="background-color: {$background}"
-data-animationin="{$animation}" data-animationout="{$animation}"
->
-
+data-animationin="{$animation}" data-animationout="{$animation}">
+  <h1></h1>
+	<img src="{$img}" alt="dd"> 
 <a class="title-post" href="" style="color: {$font_color}"> 
-	<i class="far fa-newspaper"></i>
+
+	{$product}
+	{$price}
 </a>
 
 
