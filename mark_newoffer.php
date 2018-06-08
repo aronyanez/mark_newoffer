@@ -172,6 +172,13 @@ public function displayForm()
                  'name' => 'name'
              )
           ),
+            array(
+                'type' => 'text',
+                'label' => $this->l('ID product'),
+                'name' => 'productid',
+                'desc' => $this->l('Enter ID.'),
+                'required' => true
+            )
         )        ,
         'submit' => array(
             'title' => $this->l('Save'),
