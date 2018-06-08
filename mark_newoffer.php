@@ -18,8 +18,8 @@ class mark_newoffer extends Module
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->l('Nueva Oferta');
-        $this->description = $this->trans('Adds an information block aimed at offering helpful information to reassure customers that your store is trustworthy.', array(), 'Modules.Blockreassurance.Admin');
+        $this->displayName = $this->trans('New Offer');
+        $this->description = $this->trans('Adds an alert with a popular product');
 
         $this->ps_versions_compliancy = array('min' => '1.7.2.0', 'max' => _PS_VERSION_);
 
@@ -33,7 +33,8 @@ class mark_newoffer extends Module
         && $this->registerHook('displayHome')
         && Configuration::updateValue('background', '#000')
         && Configuration::updateValue('font_color', '#fff' )
-        && Configuration::updateValue('animation', 'bounce' );
+        && Configuration::updateValue('animation', 'bounce' )
+        && Configuration::updateValue('productid', '1' );
     }
 
 
@@ -68,34 +69,36 @@ class mark_newoffer extends Module
         $background = Configuration::get('background');
         $font_color = Configuration::get('font_color');
         $animation = Configuration::get('animation');
+        $productid = Configuration::get('productid');
         $this ->context->smarty-> assign('background',$background);
         $this ->context->smarty-> assign('font_color',$font_color);
         $this ->context->smarty-> assign('animation',$animation);
+        $this ->context->smarty-> assign('productid',$productid);
         //
-        $id_product = 1;//set your product ID here
-        $image = Image::getCover($id_product);
-        $product = new Product(10, false, Context::getContext()->language->id);
+        $image = Image::getCover($productid);
+        $product = new Product($productid, false, Context::getContext()->language->id);
        $link = new Link;//because getImageLInk is not static function
        $imagePath = "http://". $link->getImageLink($product->link_rewrite, $image['id_image'], 'home_default');
        $link_product=$link -> getProductLink($product);       
        $price= number_format($product->price, 2, '.', ',');     
        $this ->context->smarty-> assign(
-           array('product' =>  $product->name, 'img' => $imagePath , 'price' => $price, 'link' =>$link_product));
+         array('product' =>  $product->name, 'img' => $imagePath , 'price' => $price, 'link' =>$link_product));
         //
        return $this->display(__FILE__, 'views/templates/hook/alert.tpl');
    }
 
    public function getContent()
    {
-     $output = null;
+       $output = null;
 
-     if (Tools::isSubmit('submit'.$this->name))
-     {
+       if (Tools::isSubmit('submit'.$this->name))
+       {
         $background= strval(Tools::getValue('background'));
         $font_color= strval(Tools::getValue('font_color'));
         $animation= strval(Tools::getValue('animation'));
+        $productid= strval(Tools::getValue('productid'));
         if ( (!$background || empty($background) || !Validate::isGenericName($background))
-         &&   (!$font_color || empty($font_color)  || !Validate::isGenericName($font_color)) )
+           &&   (!$font_color || empty($font_color)  || !Validate::isGenericName($font_color)) )
             $output .= $this->displayError($this->l('Invalid Configuration value'));
 
         else
@@ -103,6 +106,7 @@ class mark_newoffer extends Module
             Configuration::updateValue('font_color', $font_color);
             Configuration::updateValue('background', $background);
             Configuration::updateValue('animation', $animation);
+            Configuration::updateValue('productid', $productid);
             $output .= $this->displayConfirmation($this->l('Settings updated'));
         }
     }
@@ -149,24 +153,24 @@ public function displayForm()
               'desc' => $this->l('Select Animation.'),
               'required' => true,
               'options' => array(
-               'query' => $idanimation = array( 
+                 'query' => $idanimation = array( 
 
-                array(
-                    'idanimation' => 'bounce',
-                    'name' => 'bounce'
+                    array(
+                        'idanimation' => 'bounce',
+                        'name' => 'bounce'
+                    ),
+                    array(
+                        'idanimation' => 'flash',
+                        'name' => 'flash'
+                    ), 
+                    array(
+                        'idanimation' => 'pulse',
+                        'name' => 'pulse'
+                    ),                                       
                 ),
-                array(
-                    'idanimation' => 'flash',
-                    'name' => 'flash'
-                ), 
-                array(
-                    'idanimation' => 'pulse',
-                    'name' => 'pulse'
-                ),                                       
-            ),
-               'id' => 'idanimation',
-               'name' => 'name'
-           )
+                 'id' => 'idanimation',
+                 'name' => 'name'
+             )
           ),
         )        ,
         'submit' => array(
@@ -209,6 +213,8 @@ public function displayForm()
     $helper->fields_value['background'] = Configuration::get('background');
     $helper->fields_value['font_color'] = Configuration::get('font_color');
     $helper->fields_value['animation'] = $idanimation;
+    $helper->fields_value['productid'] = Configuration::get('productid');
+
 
     return $helper->generateForm($fields_form);
 }
