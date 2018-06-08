@@ -1,21 +1,26 @@
 <div class="alert" style="background-color: {$background}"
 data-animationin="{$animation}" data-animationout="{$animation}">
-<h1></h1>
-<div class="container">
-	<div class="row">
-		<div class="col-md-4 ">
-			<img src="{$img}" alt="dd" > 
-		</div>
-		<a class="title-post col-md-8 " href="xxx" style="color: {$font_color}" > 
 
-			{$product}
-			{$price}
-		</a>
-	</div>
+<div class="img-container" > 
+	<img class="product-img" src="{$img}">
 
 </div>
 
+
+<a class="title-post" href="{$link}" style="color: {$font_color}" > 
+	{$product}
+
+</a>
+
+<p class="title-post price" style="color: {$font_color}" > 
+	$ {$price}
+	
+</p>
+
+
 <a class="close" >
 	<i class="far fa-times-circle"></i>close</a>
+
+
 
 </div>

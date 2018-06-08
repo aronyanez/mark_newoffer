@@ -77,24 +77,25 @@ class mark_newoffer extends Module
         $product = new Product(10, false, Context::getContext()->language->id);
        $link = new Link;//because getImageLInk is not static function
        $imagePath = "http://". $link->getImageLink($product->link_rewrite, $image['id_image'], 'home_default');
-
+       $link_product=$link -> getProductLink($product);       
+       $price= number_format($product->price, 2, '.', ',');     
        $this ->context->smarty-> assign(
-         array('product' =>  $product->name, 'img' => $imagePath , 'price' => $product->price));
+           array('product' =>  $product->name, 'img' => $imagePath , 'price' => $price, 'link' =>$link_product));
         //
        return $this->display(__FILE__, 'views/templates/hook/alert.tpl');
    }
 
    public function getContent()
    {
-       $output = null;
+     $output = null;
 
-       if (Tools::isSubmit('submit'.$this->name))
-       {
+     if (Tools::isSubmit('submit'.$this->name))
+     {
         $background= strval(Tools::getValue('background'));
         $font_color= strval(Tools::getValue('font_color'));
         $animation= strval(Tools::getValue('animation'));
         if ( (!$background || empty($background) || !Validate::isGenericName($background))
-           &&   (!$font_color || empty($font_color)  || !Validate::isGenericName($font_color)) )
+         &&   (!$font_color || empty($font_color)  || !Validate::isGenericName($font_color)) )
             $output .= $this->displayError($this->l('Invalid Configuration value'));
 
         else
@@ -148,24 +149,24 @@ public function displayForm()
               'desc' => $this->l('Select Animation.'),
               'required' => true,
               'options' => array(
-                 'query' => $idanimation = array( 
+               'query' => $idanimation = array( 
 
-                    array(
-                        'idanimation' => 'bounce',
-                        'name' => 'bounce'
-                    ),
-                    array(
-                        'idanimation' => 'flash',
-                        'name' => 'flash'
-                    ), 
-                    array(
-                        'idanimation' => 'pulse',
-                        'name' => 'pulse'
-                    ),                                       
+                array(
+                    'idanimation' => 'bounce',
+                    'name' => 'bounce'
                 ),
-                 'id' => 'idanimation',
-                 'name' => 'name'
-             )
+                array(
+                    'idanimation' => 'flash',
+                    'name' => 'flash'
+                ), 
+                array(
+                    'idanimation' => 'pulse',
+                    'name' => 'pulse'
+                ),                                       
+            ),
+               'id' => 'idanimation',
+               'name' => 'name'
+           )
           ),
         )        ,
         'submit' => array(

@@ -54,6 +54,10 @@ and (-webkit-min-device-pixel-ratio: 2) {
   color:white;
 }
 
+.price {
+   font-size: 30px;
+
+}
 
 
 .title-post:hover{
@@ -69,7 +73,8 @@ and (-webkit-min-device-pixel-ratio: 2) {
   cursor:pointer;
 }
 
-img{
+.product-img{
 
-  with:100%;
+  width:100px!important;
+  border-radius: 20px;
 }
