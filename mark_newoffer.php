@@ -18,8 +18,8 @@ class mark_newoffer extends Module
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->trans('New Offer');
-        $this->description = $this->trans('Adds an alert with a popular product');
+        $this->displayName = $this->l('New Offer');
+        $this->description = $this->l('Add an alert with a popular product');
 
         $this->ps_versions_compliancy = array('min' => '1.7.2.0', 'max' => _PS_VERSION_);
 
