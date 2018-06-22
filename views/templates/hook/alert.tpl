@@ -1,4 +1,4 @@
-<div class="mk_alert" style="background-color: {$background}"
+<div class=" mk-alert" style="background-color: {$background}"
 data-animationin="{$animation}" data-animationout="{$animation}">
 
 <div class="img-container" > 
