@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
     <name>mark_newoffer</name>
-    <displayName><![CDATA[Nueva Oferta]]></displayName>
+    <displayName><![CDATA[Nueva oferta]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[A&ntilde;ade&nbsp;un bloque&nbsp;destinado a ofrecer informaci&oacute;n &uacute;til para tranquilizar al cliente que su tienda es segura y de confianza.]]></description>
+    <description><![CDATA[Agrega una alerta con un producto popular]]></description>
     <author><![CDATA[Ar&oacute;n Y&aacute;&ntilde;ez]]></author>
     <tab><![CDATA[front_office_features]]></tab>
-    <is_configurable>0</is_configurable>
+    <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
 	<limited_countries></limited_countries>
 </module>

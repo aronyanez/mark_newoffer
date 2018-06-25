@@ -2,7 +2,7 @@
 and (min-device-width: 320px) 
 and (max-device-width: 480px)
 and (-webkit-min-device-pixel-ratio: 2) {
-  .alert{
+ .mk-alert{
 
     width: 100%!important;
     border-bottom-left-radius: 0!important;
@@ -28,7 +28,7 @@ and (-webkit-min-device-pixel-ratio: 2) {
 
 
 
-.alert{
+.mk-alert{
   
   width: 50%;
   height: 100px;
